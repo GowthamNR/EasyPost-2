@@ -7,6 +7,13 @@
 //
 
 #import "AppDelegate.h"
+#import <FacebookSDK/FacebookSDK.h>
+#import <GooglePlus/GooglePlus.h>
+#import "Reachability.h"
+#import "TabBarController.h"
+
+
+#define FACEBOOK_SCHEME  @"fb630310590404550"
 
 @interface AppDelegate ()
 
@@ -16,10 +23,11 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    
+   
     return YES;
+    
 }
-
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
@@ -35,7 +43,8 @@
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    
+    [FBAppEvents activateApp];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -108,6 +117,38 @@
     [_managedObjectContext setPersistentStoreCoordinator:coordinator];
     return _managedObjectContext;
 }
+
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+
+  sourceApplication:(NSString *)sourceApplication
+         annotation:(id)annotation {
+    // attempt to extract a token from the url
+    if ([[url scheme] isEqualToString:FACEBOOK_SCHEME])
+    {
+        
+    return [FBAppCall handleOpenURL:url sourceApplication:sourceApplication];
+
+    }
+    else
+    {
+        return [GPPURLHandler handleURL:url
+                                 sourceApplication:sourceApplication
+                                         annotation:annotation];
+  
+    }
+}
+
+//- (BOOL)application: (UIApplication *)application
+//            openURL: (NSURL *)url
+//  sourceApplication: (NSString *)sourceApplication
+//         annotation: (id)annotation {
+//    
+//    return [GPPURLHandler handleURL:url
+//                  sourceApplication:sourceApplication
+//                         annotation:annotation];
+//}
+
 
 #pragma mark - Core Data Saving support
 
